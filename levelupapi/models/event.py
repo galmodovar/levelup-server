@@ -1,5 +1,4 @@
 from django.db import models
-
 from levelupapi.models.game import Game
 from levelupapi.models.gamer import Gamer
 
