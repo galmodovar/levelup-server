@@ -3,7 +3,6 @@ from levelupapi.models.gamer import Gamer
 from levelupapi.models.gametype import GameType
 
 
-
 class Game(models.Model):
     game_type = models.ForeignKey(GameType, on_delete=models.CASCADE)
     gamer= models.ForeignKey(Gamer, on_delete=models.CASCADE)

@@ -7,7 +7,8 @@
             "description": "Play Dungeons and Dragons",
             "date": "2021-11-01",
             "time": "17:00",
-            "organizer": 1
+            "organizer": 1,
+            "attendees": []
         }
     },
     {
@@ -18,7 +19,8 @@
             "description": "Play Monopoly",
             "date": "2021-11-02",
             "time": "18:00",
-            "organizer": 1
+            "organizer": 1,
+            "attendees": []
         }
     }
 ]
