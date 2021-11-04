@@ -5,7 +5,6 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from levelupapi.models import Event, EventGamer, Game, Gamer
-from levelupapi.views.game import GameSerializer
 from django.contrib.auth.models import User
 
 
@@ -22,7 +21,7 @@ class EventView(ViewSet):
         # Uses the token passed in the `Authorization` header
         gamer = Gamer.objects.get(user=request.auth.user)
 
-        event = Event
+        event = Event()
         event.description = request.data["description"]
         event.time = request.data["time"]
         event.date = request.data["date"]
@@ -157,3 +156,4 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('id', 'game', 'organizer', 'description', 'date', 'time')
+        depth = 1
