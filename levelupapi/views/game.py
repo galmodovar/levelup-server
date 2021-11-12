@@ -1,6 +1,7 @@
 """View module for handling requests about games"""
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseServerError
+from django.db.models import Count
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
@@ -121,6 +122,8 @@ class GameView(ViewSet):
         """
         # Get all game records from the database
         games = Game.objects.all()
+        games = Game.objects.annotate(event_count=Count('events'))
+
 
         # Support filtering games by type
         #    http://localhost:8000/games?type=1
@@ -140,9 +143,11 @@ class GameSerializer(serializers.ModelSerializer):
     Arguments:
         serializer type
     """
+    
+    event_count = serializers.IntegerField(default=None)
     class Meta:
         model = Game
-        fields = ('id', 'title', 'maker', 'num_of_players', 'skill_level', 'game_type', 'gamer')
+        fields = ('id', 'title', 'maker', 'num_of_players', 'skill_level', 'game_type', 'gamer', 'event_count')
         depth = 1
 
 

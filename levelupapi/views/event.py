@@ -1,5 +1,6 @@
 """View module for handling requests about games"""
 from django.core.exceptions import ValidationError
+from django.db.models.aggregates import Count
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
@@ -119,10 +120,10 @@ class EventView(ViewSet):
         gamer = Gamer.objects.get(user=request.auth.user)
         events = Event.objects.all()
 
-        # Set the `joined` property on every event
-        for event in events:
-            # Check to see if the gamer is in the attendees list on the event
-            event.joined = gamer in event.attendees.all()
+        events = Event.objects.annotate(
+            attendees_count = Count('attendees'),
+            joined=Count('attendees')
+        )
 
         # Support filtering events by game
         game = self.request.query_params.get('gameId', None)
@@ -198,7 +199,8 @@ class EventSerializer(serializers.ModelSerializer):
     organizer = GamerSerializer(many=False)
     game = GameSerializer(many=False)
     joined = serializers.BooleanField(required=False)
+    attendees_count = serializers.IntegerField(default=None)
     class Meta:
         model = Event
-        fields = ('id', 'game', 'organizer', 'description', 'date', 'time', 'attendees', 'joined')
+        fields = ('id', 'game', 'organizer', 'description', 'date', 'time', 'joined', 'attendees_count')
         depth = 1
